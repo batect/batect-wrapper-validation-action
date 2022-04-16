@@ -1,0 +1,24 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-20.04
+    env:
+      TERM: xterm-256color
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3.0.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3.1.1
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Check formatting
+        run: yarn check-format
