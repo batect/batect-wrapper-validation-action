@@ -1,0 +1,6 @@
+name: 'Batect wrapper validation'
+author: 'Batect contributors'
+description: 'GitHub Action to validate integrity of Batect wrapper scripts'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
