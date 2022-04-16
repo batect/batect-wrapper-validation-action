@@ -1,0 +1,8 @@
+{
+  "name": "batect-wrapper-validation-action",
+  "description": "GitHub Action to validate integrity of Batect wrapper scripts",
+  "main": "dist/index.js",
+  "repository": "git@github.com:batect/batect-wrapper-validation-action.git",
+  "author": "Charles Korn <charles@batect.dev>",
+  "license": "Apache-2.0"
+}
