@@ -4,5 +4,12 @@
   "main": "dist/index.js",
   "repository": "git@github.com:batect/batect-wrapper-validation-action.git",
   "author": "Batect contributors",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "prettier": "2.6.2"
+  },
+  "scripts": {
+    "check-format": "prettier --check .",
+    "fix-format": "prettier --write ."
+  }
 }
