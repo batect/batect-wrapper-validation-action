@@ -11,7 +11,8 @@
     "fix-format": "prettier --write .",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
-    "fix-lint": "eslint --fix src/**/*.ts"
+    "fix-lint": "eslint --fix src/**/*.ts",
+    "pre-commit": "yarn check-format && yarn lint && yarn build && yarn test"
   },
   "dependencies": {
     "@actions/core": "1.6.0"
