@@ -1,12 +1,12 @@
 name: CI
 on: [push, pull_request]
+env:
+  TERM: xterm-256color
 
 jobs:
   build:
-    name: "Build"
+    name: Build
     runs-on: ubuntu-20.04
-    env:
-      TERM: xterm-256color
 
     steps:
       - name: Check out code
@@ -33,10 +33,35 @@ jobs:
       - name: Run tests
         run: yarn test
 
+      - name: Upload built files
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: dist
+          path: dist
+          if-no-files-found: error
+
+  release:
+    name: Release
+    runs-on: ubuntu-20.04
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/release/') && github.repository == 'batect/batect-wrapper-validation-action'
+    needs:
+      - build
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3.0.1
+
+      - name: Download built files
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: dist
+          path: dist
+
       - name: Extract version
         id: extract_version
         run: echo "::set-output name=version::$(echo '${{ github.ref }}' | sed 's#refs/tags/release/##')"
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/release/') && github.repository == 'batect/batect-wrapper-validation-action'
 
       - name: Publish
         uses: JasonEtco/build-and-tag-action@v2.0.0
@@ -44,4 +69,3 @@ jobs:
           tag_name: ${{ steps.extract_version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/release/') && github.repository == 'batect/batect-wrapper-validation-action'
