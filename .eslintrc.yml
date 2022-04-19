@@ -11,7 +11,8 @@ parserOptions:
   sourceType: module
 plugins:
   - "@typescript-eslint"
-rules: {}
+rules:
+  sort-imports: error
 overrides:
   - files:
       - "**/*.test.ts"

@@ -1,0 +1,5 @@
+#! /usr/bin/env bash
+
+VERSION="1.2.3"
+
+echo "This is the correct Unix wrapper script for Batect version 1.2.3."

@@ -10,6 +10,7 @@
     "check-format": "prettier --check .",
     "fix-format": "prettier --write .",
     "test": "jest",
+    "continuous-test": "jest --watchAll",
     "lint": "eslint src/**/*.ts",
     "fix-lint": "eslint --fix src/**/*.ts",
     "pre-commit": "yarn check-format && yarn lint && yarn build && yarn test"
