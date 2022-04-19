@@ -33,6 +33,13 @@ class TestStatusReporter {
   }
 }
 
+interface FailureScenario {
+  fixtureName: string;
+  description: string;
+  expectedBehaviour: string;
+  expectedErrorMessage: string;
+}
+
 describe("the validation action", () => {
   let reporter: TestStatusReporter;
 
@@ -51,96 +58,73 @@ describe("the validation action", () => {
     });
   });
 
-  describe("when the Unix wrapper script is missing", () => {
-    const config = new TestConfiguration("missing-unix-wrapper");
+  const failureScenarios: FailureScenario[] = [
+    {
+      fixtureName: "missing-unix-wrapper",
+      description: "the Unix wrapper script is missing",
+      expectedBehaviour: "reports that the Unix wrapper script is missing",
+      expectedErrorMessage: "Unix wrapper script 'batect' not found.",
+    },
+    {
+      fixtureName: "missing-windows-wrapper",
+      description: "the Windows wrapper script is missing",
+      expectedBehaviour: "reports that the Windows wrapper script is missing",
+      expectedErrorMessage: "Windows wrapper script 'batect.cmd' not found.",
+    },
+    {
+      fixtureName: "unix-wrapper-has-no-version",
+      description: "the Unix wrapper script has no version",
+      expectedBehaviour: "reports that the Unix wrapper script has no version number",
+      expectedErrorMessage: "Could not determine version of Unix wrapper script 'batect'.",
+    },
+    {
+      fixtureName: "windows-wrapper-has-no-version",
+      description: "the Windows wrapper script has no version",
+      expectedBehaviour: "reports that the Windows wrapper script has no version number",
+      expectedErrorMessage: "Could not determine version of Windows wrapper script 'batect.cmd'.",
+    },
+    {
+      fixtureName: "unix-wrapper-has-multiple-versions",
+      description: "the Unix wrapper script has multiple versions",
+      expectedBehaviour: "reports that the Unix wrapper script has multiple version numbers",
+      expectedErrorMessage: "Found multiple version numbers in Unix wrapper script 'batect'.",
+    },
+    {
+      fixtureName: "windows-wrapper-has-multiple-versions",
+      description: "the Windows wrapper script has multiple versions",
+      expectedBehaviour: "reports that the Windows wrapper script has multiple version numbers",
+      expectedErrorMessage: "Found multiple version numbers in Windows wrapper script 'batect.cmd'.",
+    },
+    {
+      fixtureName: "unix-wrapper-has-invalid-version",
+      description: "the Unix wrapper script has an invalid version",
+      expectedBehaviour: "reports that the Unix wrapper script has an invalid version number",
+      expectedErrorMessage: "Unix wrapper script 'batect' has invalid version '0.79.a'.",
+    },
+    {
+      fixtureName: "windows-wrapper-has-invalid-version",
+      description: "the Windows wrapper script has an invalid version",
+      expectedBehaviour: "reports that the Windows wrapper script has an invalid version number",
+      expectedErrorMessage: "Windows wrapper script 'batect.cmd' has invalid version '0.79.a'.",
+    },
+    {
+      fixtureName: "different-versions",
+      description: "the wrapper scripts have different versions",
+      expectedBehaviour: "reports the versions found in each file",
+      expectedErrorMessage:
+        "The wrapper scripts have different versions. The Unix wrapper script 'batect' has version '1.2.3', and the Windows wrapper script 'batect.cmd' has version '4.5.6'.",
+    },
+  ];
 
-    test("it fails and reports that the Unix wrapper script is missing", async () => {
-      await execute(config, reporter);
+  failureScenarios.forEach((scenario) => {
+    describe(`when ${scenario.description}`, () => {
+      const config = new TestConfiguration(scenario.fixtureName);
 
-      expect(reporter.failureMessage).toBe("Unix wrapper script 'batect' not found.");
-    });
-  });
+      test(`it fails and ${scenario.expectedBehaviour}`, async () => {
+        await execute(config, reporter);
 
-  describe("when the Windows wrapper script is missing", () => {
-    const config = new TestConfiguration("missing-windows-wrapper");
-
-    test("it fails and reports that the Windows wrapper script is missing", async () => {
-      await execute(config, reporter);
-
-      expect(reporter.failureMessage).toBe("Windows wrapper script 'batect.cmd' not found.");
-    });
-  });
-
-  describe("when the Unix wrapper script has no version", () => {
-    const config = new TestConfiguration("unix-wrapper-has-no-version");
-
-    test("it fails and reports that the Unix wrapper script has no version number", async () => {
-      await execute(config, reporter);
-
-      expect(reporter.failureMessage).toBe("Could not determine version of Unix wrapper script 'batect'.");
-    });
-  });
-
-  describe("when the Windows wrapper script has no version", () => {
-    const config = new TestConfiguration("windows-wrapper-has-no-version");
-
-    test("it fails and reports that the Windows wrapper script has no version number", async () => {
-      await execute(config, reporter);
-
-      expect(reporter.failureMessage).toBe("Could not determine version of Windows wrapper script 'batect.cmd'.");
-    });
-  });
-
-  describe("when the Unix wrapper script has multiple versions", () => {
-    const config = new TestConfiguration("unix-wrapper-has-multiple-versions");
-
-    test("it fails and reports that the Unix wrapper script has multiple version numbers", async () => {
-      await execute(config, reporter);
-
-      expect(reporter.failureMessage).toBe("Found multiple version numbers in Unix wrapper script 'batect'.");
-    });
-  });
-
-  describe("when the Windows wrapper script has multiple versions", () => {
-    const config = new TestConfiguration("windows-wrapper-has-multiple-versions");
-
-    test("it fails and reports that the Windows wrapper script has multiple version numbers", async () => {
-      await execute(config, reporter);
-
-      expect(reporter.failureMessage).toBe("Found multiple version numbers in Windows wrapper script 'batect.cmd'.");
-    });
-  });
-
-  describe("when the Unix wrapper script has an invalid version", () => {
-    const config = new TestConfiguration("unix-wrapper-has-invalid-version");
-
-    test("it fails and reports that the Unix wrapper script has an invalid version number", async () => {
-      await execute(config, reporter);
-
-      expect(reporter.failureMessage).toBe("Unix wrapper script 'batect' has invalid version '0.79.a'.");
-    });
-  });
-
-  describe("when the Windows wrapper script has an invalid version", () => {
-    const config = new TestConfiguration("windows-wrapper-has-invalid-version");
-
-    test("it fails and reports that the Windows wrapper script has an invalid version number", async () => {
-      await execute(config, reporter);
-
-      expect(reporter.failureMessage).toBe("Windows wrapper script 'batect.cmd' has invalid version '0.79.a'.");
-    });
-  });
-
-  describe("when the wrapper scripts have different versions", () => {
-    const config = new TestConfiguration("different-versions");
-
-    test("it fails and reports the versions found in each file", async () => {
-      await execute(config, reporter);
-
-      expect(reporter.failureMessage).toBe(
-        "The wrapper scripts have different versions. The Unix wrapper script 'batect' has version '1.2.3', and the Windows wrapper script 'batect.cmd' has version '4.5.6'."
-      );
+        expect(reporter.failureMessage).toBe(scenario.expectedErrorMessage);
+      });
     });
   });
 });
-
