@@ -4,6 +4,7 @@ import { Configuration } from "./configuration";
 
 const createConfig = (): Configuration => ({
   directory: process.cwd(),
+  checksumDownloadRootUrl: "https://github.com/batect/batect/releases/download",
 });
 
 const createReporter = (): StatusReporter => ({

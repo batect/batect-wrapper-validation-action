@@ -2,10 +2,11 @@ import * as fs from "fs";
 import * as fspromises from "fs/promises";
 import * as path from "path";
 import { Configuration } from "./configuration";
+import { sha256 } from "./hashing";
 
 export interface WrapperInfo {
   version: string;
-  checksum: string;
+  actualChecksum: string;
 }
 
 const versionPattern = /^\d+.\d+.\d+$/;
@@ -26,10 +27,11 @@ export class WrapperInfoExtractor {
 
     const fileContent = await fspromises.readFile(filePath, { encoding: "utf-8" });
     const version = this.extractVersion(fileContent);
+    const actualChecksum = sha256(fileContent);
 
     return {
       version,
-      checksum: "",
+      actualChecksum,
     };
   };
 

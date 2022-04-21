@@ -7,7 +7,9 @@ const config: Config.InitialOptions = {
   errorOnDeprecated: true,
   transform: {
     "^.+\\.ts$": "ts-jest",
+    "^.+\\.js$": "babel-jest",
   },
+  transformIgnorePatterns: [],
   verbose: true,
 };
 

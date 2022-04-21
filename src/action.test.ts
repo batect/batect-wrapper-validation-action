@@ -1,35 +1,17 @@
-import * as fs from "fs";
-import * as path from "path";
 import { execute } from "./action";
+import { StaticFilesServer, TestStatusReporter } from "./test-helpers";
+import path from "path";
+import fs from "fs";
 
 class TestConfiguration {
   public directory: string;
 
-  constructor(fixtureName: string) {
+  constructor(fixtureName: string, readonly checksumDownloadRootUrl: string) {
     this.directory = path.join(__dirname, "fixtures", "targets", fixtureName);
 
     if (!fs.existsSync(this.directory)) {
       throw new Error(`Test fixture directory '${this.directory}' does not exist.`);
     }
-  }
-}
-
-class TestStatusReporter {
-  public failureReported: boolean;
-  public failureMessage: string | null;
-
-  constructor() {
-    this.failureReported = false;
-    this.failureMessage = null;
-  }
-
-  setFailed(message: string): void {
-    if (this.failureReported) {
-      throw Error("A failure has already been reported for this run.");
-    }
-
-    this.failureReported = true;
-    this.failureMessage = message;
   }
 }
 
@@ -41,16 +23,25 @@ interface FailureScenario {
 }
 
 describe("the validation action", () => {
+  let checksumServer: StaticFilesServer;
   let reporter: TestStatusReporter;
+
+  beforeAll(async () => {
+    checksumServer = new StaticFilesServer(path.join(__dirname, "fixtures", "checksums"));
+    await checksumServer.start();
+  });
+
+  afterAll(async () => {
+    await checksumServer.shutdown();
+  });
 
   beforeEach(() => {
     reporter = new TestStatusReporter();
   });
 
   describe("when both wrapper scripts match the expected checksums", () => {
-    const config = new TestConfiguration("valid");
-
     test("it succeeds", async () => {
+      const config = new TestConfiguration("valid", checksumServer.url);
       await execute(config, reporter);
 
       expect(reporter.failureMessage).toBeNull();
@@ -114,13 +105,26 @@ describe("the validation action", () => {
       expectedErrorMessage:
         "The wrapper scripts have different versions. The Unix wrapper script 'batect' has version '1.2.3', and the Windows wrapper script 'batect.cmd' has version '4.5.6'.",
     },
+    {
+      fixtureName: "unix-wrapper-doesnt-match-expected",
+      description: "the Unix wrapper script does not have the expected checksum",
+      expectedBehaviour: "reports that the Unix wrapper script doesn't have the expected checksum and includes both the expected and actual checksums",
+      expectedErrorMessage:
+        "Unix wrapper script 'batect' has checksum 51374c35bdd0eb03cad65af098afc19d9143a8b6e8b7abadc60b2032f80c5f20, but it should have checksum 7513b83a3d0f2cb5ee43db3b3d84d0199014e3c1dc222c318bcf87b7829ab716.",
+    },
+    {
+      fixtureName: "windows-wrapper-doesnt-match-expected",
+      description: "the Windows wrapper script does not have the expected checksum",
+      expectedBehaviour: "reports that the Windows wrapper script doesn't have the expected checksum and includes both the expected and actual checksums",
+      expectedErrorMessage:
+        "Windows wrapper script 'batect.cmd' has checksum 971d81d2ad46784b10a57e2d2b85b20eb57070fafc98a1713291345807f6f4f3, but it should have checksum 19e16909b4fe079ee6307dc1318f06f5b4f05db86a6922045ff84913a8afffcf.",
+    },
   ];
 
   failureScenarios.forEach((scenario) => {
     describe(`when ${scenario.description}`, () => {
-      const config = new TestConfiguration(scenario.fixtureName);
-
       test(`it fails and ${scenario.expectedBehaviour}`, async () => {
+        const config = new TestConfiguration(scenario.fixtureName, checksumServer.url);
         await execute(config, reporter);
 
         expect(reporter.failureMessage).toBe(scenario.expectedErrorMessage);
