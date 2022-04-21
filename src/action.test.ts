@@ -119,6 +119,25 @@ describe("the validation action", () => {
       expectedErrorMessage:
         "Windows wrapper script 'batect.cmd' has checksum 971d81d2ad46784b10a57e2d2b85b20eb57070fafc98a1713291345807f6f4f3, but it should have checksum 19e16909b4fe079ee6307dc1318f06f5b4f05db86a6922045ff84913a8afffcf.",
     },
+    {
+      fixtureName: "inverted-content",
+      description: "the content of both wrapper scripts have been swapped",
+      expectedBehaviour: "reports a useful error message",
+      expectedErrorMessage: "Could not determine version of Unix wrapper script 'batect'.",
+    },
+    {
+      fixtureName: "both-dont-match-expected",
+      description: "the content of both wrapper scripts is incorrect",
+      expectedBehaviour: "reports that the files do not match the expected checksum",
+      expectedErrorMessage:
+        "Unix wrapper script 'batect' has checksum 51374c35bdd0eb03cad65af098afc19d9143a8b6e8b7abadc60b2032f80c5f20, but it should have checksum 7513b83a3d0f2cb5ee43db3b3d84d0199014e3c1dc222c318bcf87b7829ab716.",
+    },
+    {
+      fixtureName: "unsupported-version",
+      description: "the wrapper scripts are for a version of Batect known to not have published checksums",
+      expectedBehaviour: "reports that the version is unsupported",
+      expectedErrorMessage: "Checksums are only available for Batect version 0.79.0 or later, but this project uses 0.78.0.",
+    },
   ];
 
   failureScenarios.forEach((scenario) => {
@@ -129,6 +148,15 @@ describe("the validation action", () => {
 
         expect(reporter.failureMessage).toBe(scenario.expectedErrorMessage);
       });
+    });
+  });
+
+  describe("when the checksum file could not be downloaded because it does not exist", () => {
+    test("it fails and reports that the checksum file could not be downloaded and includes the full URL of the file that was attempted to be downloaded", async () => {
+      const config = new TestConfiguration("checksum-file-not-found", checksumServer.url);
+      await execute(config, reporter);
+
+      expect(reporter.failureMessage).toBe(`Could not download checksum file ${checksumServer.url}/0.79.1/checksums.sha256: HTTP 404 (Not Found)`);
     });
   });
 });
