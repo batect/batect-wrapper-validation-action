@@ -10,7 +10,6 @@ const config: Config.InitialOptions = {
     "^.+\\.js$": "babel-jest",
   },
   transformIgnorePatterns: [],
-  verbose: true,
 };
 
 export default config;
