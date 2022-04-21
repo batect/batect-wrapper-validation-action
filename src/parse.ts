@@ -13,7 +13,9 @@ const checksumLinePattern = /^([0-9a-f]{64})  (.*)$/;
 const parseChecksumLine = (line: string): FileChecksum => {
   const match = line.match(checksumLinePattern);
 
-  // TODO: fail if no match
+  if (match === null) {
+    throw new Error(`Checksum file entry '${line}' is invalid.`);
+  }
 
   return {
     fileName: match![2],
@@ -24,8 +26,13 @@ const parseChecksumLine = (line: string): FileChecksum => {
 const findChecksum = (checksums: FileChecksum[], fileName: string): string => {
   const matches = checksums.filter((c) => c.fileName == fileName);
 
-  // TODO: fail if multiple matching entries
-  // TODO: fail if no matching entries
+  if (matches.length === 0) {
+    throw new Error(`Checksum file does not contain an entry for file '${fileName}'.`);
+  }
+
+  if (matches.length > 1) {
+    throw new Error(`Checksum file contains ${matches.length} entries for file '${fileName}'.`);
+  }
 
   return matches[0].checksum;
 };
