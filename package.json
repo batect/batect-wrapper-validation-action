@@ -6,7 +6,7 @@
   "author": "Batect contributors",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "ncc build --source-map --minify src/index.ts",
+    "build": "ncc build --minify src/index.ts",
     "check-format": "prettier --check .",
     "fix-format": "prettier --write .",
     "test": "jest",
