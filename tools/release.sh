@@ -16,3 +16,6 @@ git tag -s "$RELEASE_TAG" -m "v$VERSION"
 git tag -s "$WORKAROUND_TAG" -m "v$VERSION"
 
 git push origin "$RELEASE_TAG" "$WORKAROUND_TAG"
+
+# Remove tag that will be updated by the build process to prevent issues pulling later.
+git tag -d "$WORKAROUND_TAG"
