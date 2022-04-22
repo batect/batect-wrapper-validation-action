@@ -1,8 +1,8 @@
 name: CI
 on:
   push:
-    branches: *
-    tags-ignore: v*
+    branches: "*"
+    tags-ignore: "v*"
   pull_request:
 env:
   TERM: xterm-256color
