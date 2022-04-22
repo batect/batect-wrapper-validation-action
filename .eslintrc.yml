@@ -13,7 +13,9 @@ plugins:
   - "@typescript-eslint"
   - license-header
 rules:
-  sort-imports: error
+  sort-imports:
+    - error
+    - ignoreCase: true
   license-header/header:
     - error
     - ./license.js
