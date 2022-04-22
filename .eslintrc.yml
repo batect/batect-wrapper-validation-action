@@ -11,8 +11,12 @@ parserOptions:
   sourceType: module
 plugins:
   - "@typescript-eslint"
+  - license-header
 rules:
   sort-imports: error
+  license-header/header:
+    - error
+    - ./license.js
 overrides:
   - files:
       - "**/*.test.ts"
