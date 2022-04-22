@@ -1,12 +1,12 @@
 {
   "name": "batect-wrapper-validation-action",
   "description": "GitHub Action to validate integrity of Batect wrapper scripts",
-  "main": "src/index.ts",
+  "main": "dist/index.ts",
   "repository": "git@github.com:batect/batect-wrapper-validation-action.git",
   "author": "Batect contributors",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "ncc build --source-map --minify",
+    "build": "ncc build --source-map --minify src/index.ts",
     "check-format": "prettier --check .",
     "fix-format": "prettier --write .",
     "test": "jest",
