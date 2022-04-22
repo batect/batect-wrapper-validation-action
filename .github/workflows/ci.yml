@@ -1,5 +1,8 @@
 name: CI
-on: [push, pull_request]
+on:
+  push:
+    tags-ignore: v*
+  pull_request:
 env:
   TERM: xterm-256color
 
