@@ -21,5 +21,6 @@
       "matchFiles": ["README.md"],
       "commitMessageTopic": "in readme"
     }
-  ]
+  ],
+  "ignorePaths": ["src/fixtures/**"]
 }
