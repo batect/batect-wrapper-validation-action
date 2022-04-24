@@ -34,7 +34,7 @@ async function run(): Promise<void> {
 
     await execute(config, reporter);
 
-    core.info(`Checksums validated successfully.`);
+    core.info(`Wrapper scripts are valid.`);
   } catch (e) {
     if (e instanceof Error) {
       core.setFailed(`Unhandled error: ${e.message} at ${e.stack}`);
