@@ -19,7 +19,7 @@
   "packageRules": [
     {
       "matchFiles": ["README.md"],
-      "commitMessageTopic": "in readme"
+      "commitMessageTopic": "action version number in readme"
     }
   ],
   "ignorePaths": ["src/fixtures/**"]
