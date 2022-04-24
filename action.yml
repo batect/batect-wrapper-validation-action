@@ -1,11 +1,6 @@
 name: "Batect wrapper validation"
 author: "Batect contributors"
 description: "GitHub Action to validate integrity of Batect wrapper scripts"
-
-branding:
-  icon: check-square
-  color: gray-dark
-
 runs:
   using: "node16"
   main: "dist/index.js"
