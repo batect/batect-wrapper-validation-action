@@ -17,10 +17,12 @@
 export class TestStatusReporter {
   public failureReported: boolean;
   public failureMessage: string | null;
+  public readonly infoMessages: string[];
 
   constructor() {
     this.failureReported = false;
     this.failureMessage = null;
+    this.infoMessages = [];
   }
 
   setFailed(message: string): void {
@@ -30,5 +32,9 @@ export class TestStatusReporter {
 
     this.failureReported = true;
     this.failureMessage = message;
+  }
+
+  info(message: string): void {
+    this.infoMessages.push(message);
   }
 }

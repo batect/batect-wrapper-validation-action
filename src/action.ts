@@ -22,6 +22,7 @@ import fetch from "node-fetch";
 
 export interface StatusReporter {
   setFailed(message: string): void;
+  info(message: string): void;
 }
 
 const unixWrapperInfoExtractor = new WrapperInfoExtractor("Unix", "batect", /^\s*VERSION="(.*)"/gm);
@@ -81,6 +82,8 @@ export async function execute(config: Configuration, reporter: StatusReporter): 
 
     const expectedChecksums = await downloadExpectedChecksums(config, version);
     validateChecksums(unixInfo, windowsInfo, expectedChecksums);
+
+    reporter.info("Wrapper scripts are valid.");
   } catch (e) {
     if (e instanceof Error) {
       reporter.setFailed(e.message);

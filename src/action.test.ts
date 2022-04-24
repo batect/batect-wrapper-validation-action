@@ -62,6 +62,7 @@ describe("the validation action", () => {
 
       expect(reporter.failureMessage).toBeNull();
       expect(reporter.failureReported).toBe(false);
+      expect(reporter.infoMessages).toEqual(["Wrapper scripts are valid."]);
     });
   });
 
@@ -163,6 +164,7 @@ describe("the validation action", () => {
         await execute(config, reporter);
 
         expect(reporter.failureMessage).toBe(scenario.expectedErrorMessage);
+        expect(reporter.infoMessages).toEqual([]);
       });
     });
   });
@@ -173,6 +175,7 @@ describe("the validation action", () => {
       await execute(config, reporter);
 
       expect(reporter.failureMessage).toBe(`Could not download checksum file ${checksumServer.url}/0.79.1/checksums.sha256: HTTP 404 (Not Found)`);
+      expect(reporter.infoMessages).toEqual([]);
     });
   });
 });

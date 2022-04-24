@@ -25,6 +25,7 @@ const createConfig = (): Configuration => ({
 
 const createReporter = (): StatusReporter => ({
   setFailed: core.setFailed,
+  info: core.info,
 });
 
 async function run(): Promise<void> {
@@ -33,8 +34,6 @@ async function run(): Promise<void> {
     const reporter = createReporter();
 
     await execute(config, reporter);
-
-    core.info(`Wrapper scripts are valid.`);
   } catch (e) {
     if (e instanceof Error) {
       core.setFailed(`Unhandled error: ${e.message} at ${e.stack}`);
