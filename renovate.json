@@ -13,7 +13,12 @@
         "^\\s+uses: (?<depName>.*)@v(?<currentValue>\\d+\\.\\d+\\.\\d+)$"
       ],
       "datasourceTemplate": "github-releases",
-      "extractVersionTemplate": "^v(?<version>.*)$",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchFiles": ["README.md"],
       "commitMessageTopic": "in readme"
     }
   ]
