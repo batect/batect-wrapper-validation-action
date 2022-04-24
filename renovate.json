@@ -10,7 +10,7 @@
     {
       "fileMatch": ["^README.md$"],
       "matchStrings": [
-        "^\\s+uses: (?<depName>.*)@v(?<currentValue>\\d+\\.\\d+\\.\\d+)$"
+        "uses:\\s+(?<depName>.*)@v(?<currentValue>\\d+\\.\\d+\\.\\d+)"
       ],
       "datasourceTemplate": "github-tags",
       "extractVersionTemplate": "^v(?<version>.*)$"
