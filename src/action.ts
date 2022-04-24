@@ -61,12 +61,14 @@ const downloadExpectedChecksums = async (config: Configuration, version: string)
 
 const validateChecksums = (unixInfo: WrapperInfo, windowsInfo: WrapperInfo, expectedChecksums: WrapperChecksums) => {
   if (unixInfo.actualChecksum !== expectedChecksums.unix) {
-    throw new Error(`Unix wrapper script 'batect' has checksum ${unixInfo.actualChecksum}, but it should have checksum ${expectedChecksums.unix}.`);
+    throw new Error(
+      `Unix wrapper script 'batect' has SHA256 checksum ${unixInfo.actualChecksum}, but it should have SHA256 checksum ${expectedChecksums.unix}.`
+    );
   }
 
   if (windowsInfo.actualChecksum !== expectedChecksums.windows) {
     throw new Error(
-      `Windows wrapper script 'batect.cmd' has checksum ${windowsInfo.actualChecksum}, but it should have checksum ${expectedChecksums.windows}.`
+      `Windows wrapper script 'batect.cmd' has SHA256 checksum ${windowsInfo.actualChecksum}, but it should have SHA256 checksum ${expectedChecksums.windows}.`
     );
   }
 };

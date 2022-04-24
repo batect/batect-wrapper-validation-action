@@ -127,14 +127,14 @@ describe("the validation action", () => {
       description: "the Unix wrapper script does not have the expected checksum",
       expectedBehaviour: "reports that the Unix wrapper script doesn't have the expected checksum and includes both the expected and actual checksums",
       expectedErrorMessage:
-        "Unix wrapper script 'batect' has checksum 51374c35bdd0eb03cad65af098afc19d9143a8b6e8b7abadc60b2032f80c5f20, but it should have checksum 7513b83a3d0f2cb5ee43db3b3d84d0199014e3c1dc222c318bcf87b7829ab716.",
+        "Unix wrapper script 'batect' has SHA256 checksum 51374c35bdd0eb03cad65af098afc19d9143a8b6e8b7abadc60b2032f80c5f20, but it should have SHA256 checksum 7513b83a3d0f2cb5ee43db3b3d84d0199014e3c1dc222c318bcf87b7829ab716.",
     },
     {
       fixtureName: "windows-wrapper-doesnt-match-expected",
       description: "the Windows wrapper script does not have the expected checksum",
       expectedBehaviour: "reports that the Windows wrapper script doesn't have the expected checksum and includes both the expected and actual checksums",
       expectedErrorMessage:
-        "Windows wrapper script 'batect.cmd' has checksum 971d81d2ad46784b10a57e2d2b85b20eb57070fafc98a1713291345807f6f4f3, but it should have checksum 19e16909b4fe079ee6307dc1318f06f5b4f05db86a6922045ff84913a8afffcf.",
+        "Windows wrapper script 'batect.cmd' has SHA256 checksum 971d81d2ad46784b10a57e2d2b85b20eb57070fafc98a1713291345807f6f4f3, but it should have SHA256 checksum 19e16909b4fe079ee6307dc1318f06f5b4f05db86a6922045ff84913a8afffcf.",
     },
     {
       fixtureName: "inverted-content",
@@ -147,7 +147,7 @@ describe("the validation action", () => {
       description: "the content of both wrapper scripts is incorrect",
       expectedBehaviour: "reports that the files do not match the expected checksum",
       expectedErrorMessage:
-        "Unix wrapper script 'batect' has checksum 51374c35bdd0eb03cad65af098afc19d9143a8b6e8b7abadc60b2032f80c5f20, but it should have checksum 7513b83a3d0f2cb5ee43db3b3d84d0199014e3c1dc222c318bcf87b7829ab716.",
+        "Unix wrapper script 'batect' has SHA256 checksum 51374c35bdd0eb03cad65af098afc19d9143a8b6e8b7abadc60b2032f80c5f20, but it should have SHA256 checksum 7513b83a3d0f2cb5ee43db3b3d84d0199014e3c1dc222c318bcf87b7829ab716.",
     },
     {
       fixtureName: "unsupported-version",
