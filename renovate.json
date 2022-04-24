@@ -8,7 +8,7 @@
   },
   "regexManagers": [
     {
-      "fileMatch": ["^README.md$"],
+      "fileMatch": ["^README\\.md$"],
       "matchStrings": [
         "uses:\\s+(?<depName>.*)@v(?<currentValue>\\d+\\.\\d+\\.\\d+)"
       ],
