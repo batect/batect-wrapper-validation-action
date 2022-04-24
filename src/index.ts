@@ -33,6 +33,8 @@ async function run(): Promise<void> {
     const reporter = createReporter();
 
     await execute(config, reporter);
+
+    core.info(`Checksums validated successfully.`);
   } catch (e) {
     if (e instanceof Error) {
       core.setFailed(`Unhandled error: ${e.message} at ${e.stack}`);
