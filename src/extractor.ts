@@ -23,6 +23,12 @@ import { sha256 } from "./hashing";
 export interface WrapperInfo {
   version: string;
   actualChecksum: string;
+  suspectedLineEndingStyle: LineEndingStyle;
+}
+
+export enum LineEndingStyle {
+  Unix,
+  Windows,
 }
 
 const versionPattern = /^\d+.\d+.\d+$/;
@@ -44,10 +50,12 @@ export class WrapperInfoExtractor {
     const fileContent = await fspromises.readFile(filePath, { encoding: "utf-8" });
     const version = this.extractVersion(fileContent);
     const actualChecksum = sha256(fileContent);
+    const suspectedLineEndingStyle = this.guessLineEndings(fileContent);
 
     return {
       version,
       actualChecksum,
+      suspectedLineEndingStyle,
     };
   };
 
@@ -69,5 +77,13 @@ export class WrapperInfoExtractor {
     }
 
     return version;
+  };
+
+  private guessLineEndings = (fileContent: string): LineEndingStyle => {
+    if (fileContent.includes("\r\n")) {
+      return LineEndingStyle.Windows;
+    } else {
+      return LineEndingStyle.Unix;
+    }
   };
 }

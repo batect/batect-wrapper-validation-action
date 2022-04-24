@@ -15,8 +15,8 @@
 */
 
 import * as semver from "semver";
+import { LineEndingStyle, WrapperInfo, WrapperInfoExtractor } from "./extractor";
 import { parseChecksums, WrapperChecksums } from "./parse";
-import { WrapperInfo, WrapperInfoExtractor } from "./extractor";
 import { Configuration } from "./configuration";
 import fetch from "node-fetch";
 
@@ -60,16 +60,35 @@ const downloadExpectedChecksums = async (config: Configuration, version: string)
 };
 
 const validateChecksums = (unixInfo: WrapperInfo, windowsInfo: WrapperInfo, expectedChecksums: WrapperChecksums) => {
-  if (unixInfo.actualChecksum !== expectedChecksums.unix) {
-    throw new Error(
-      `Unix wrapper script 'batect' has SHA256 checksum ${unixInfo.actualChecksum}, but it should have SHA256 checksum ${expectedChecksums.unix}.`
-    );
+  validateChecksum(unixInfo, expectedChecksums.unix, LineEndingStyle.Unix, "Unix", "batect");
+  validateChecksum(windowsInfo, expectedChecksums.windows, LineEndingStyle.Windows, "Windows", "batect.cmd");
+};
+
+const validateChecksum = (wrapperInfo: WrapperInfo, expectedChecksum: string, expectedLineEndings: LineEndingStyle, platformName: string, fileName: string) => {
+  if (wrapperInfo.actualChecksum === expectedChecksum) {
+    return;
   }
 
-  if (windowsInfo.actualChecksum !== expectedChecksums.windows) {
-    throw new Error(
-      `Windows wrapper script 'batect.cmd' has SHA256 checksum ${windowsInfo.actualChecksum}, but it should have SHA256 checksum ${expectedChecksums.windows}.`
-    );
+  let lineEndingWarning = "";
+
+  if (wrapperInfo.suspectedLineEndingStyle !== expectedLineEndings) {
+    const suspectedDescription = lineEndingDescription(wrapperInfo.suspectedLineEndingStyle);
+    const expectedDescription = lineEndingDescription(expectedLineEndings);
+
+    lineEndingWarning = ` '${fileName}' appears to have ${suspectedDescription} instead of ${expectedDescription}, which may be causing this mismatch.`;
+  }
+
+  throw new Error(
+    `${platformName} wrapper script '${fileName}' has SHA256 checksum ${wrapperInfo.actualChecksum}, but it should have SHA256 checksum ${expectedChecksum}.${lineEndingWarning}`
+  );
+};
+
+const lineEndingDescription = (style: LineEndingStyle): string => {
+  switch (style) {
+    case LineEndingStyle.Unix:
+      return "Unix-style line endings (LF)";
+    case LineEndingStyle.Windows:
+      return "Windows-style line endings (CR/LF)";
   }
 };
 

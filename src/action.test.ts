@@ -155,6 +155,20 @@ describe("the validation action", () => {
       expectedBehaviour: "reports that the version is unsupported",
       expectedErrorMessage: "Checksums are only available for Batect version 0.79.0 or later, but this project uses 0.78.0.",
     },
+    {
+      fixtureName: "unix-wrapper-has-windows-line-endings",
+      description: "the Unix wrapper has the correct content but Windows-style line endings",
+      expectedBehaviour: "reports that the script has the wrong line endings",
+      expectedErrorMessage:
+        "Unix wrapper script 'batect' has SHA256 checksum 22b4cf8c11b1ee5339ade8998dbdc836cdb414b7b56e002d918c0a90c9e96b1a, but it should have SHA256 checksum 7513b83a3d0f2cb5ee43db3b3d84d0199014e3c1dc222c318bcf87b7829ab716. 'batect' appears to have Windows-style line endings (CR/LF) instead of Unix-style line endings (LF), which may be causing this mismatch.",
+    },
+    {
+      fixtureName: "windows-wrapper-has-unix-line-endings",
+      description: "the Windows wrapper has the correct content but Unix-style line endings",
+      expectedBehaviour: "reports that the script has the wrong line endings",
+      expectedErrorMessage:
+        "Windows wrapper script 'batect.cmd' has SHA256 checksum 05dbb1da13bba600d2a9a6ea316f0158e327322f832bb27fe567f0d62e2ca094, but it should have SHA256 checksum 19e16909b4fe079ee6307dc1318f06f5b4f05db86a6922045ff84913a8afffcf. 'batect.cmd' appears to have Unix-style line endings (LF) instead of Windows-style line endings (CR/LF), which may be causing this mismatch.",
+    },
   ];
 
   failureScenarios.forEach((scenario) => {
