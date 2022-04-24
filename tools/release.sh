@@ -9,6 +9,15 @@ if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 
+if [ -n "$(git status --porcelain)" ]; then
+  echo "Uncommited changes detected. Commit or stash them before releasing.">/dev/stderr
+  echo
+  git status --porcelain
+  echo
+  git diff
+  exit 1
+fi
+
 RELEASE_TAG="release/v$VERSION"
 WORKAROUND_TAG="v$VERSION" # This tag can be removed once https://github.com/JasonEtco/build-and-tag-action/pull/21 is merged
 
