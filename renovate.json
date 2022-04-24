@@ -5,5 +5,16 @@
     "enabled": true,
     "automerge": true,
     "extends": ["schedule:earlyMondays"]
-  }
+  },
+  "regexManagers": [
+    {
+      "fileMatch": ["README.md"],
+      "matchStrings": [
+        "^\\s+uses: (?<depName>.*)@v(?<currentValue>\\d+\\.\\d+\\.\\d+)$"
+      ],
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.*)$",
+      "commitMessageTopic": "in readme"
+    }
+  ]
 }
