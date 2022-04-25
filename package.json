@@ -16,7 +16,7 @@
     "pre-commit": "yarn check-format && yarn lint && yarn build && yarn test"
   },
   "dependencies": {
-    "@actions/core": "1.6.0",
+    "@actions/core": "1.7.0",
     "node-fetch": "3.2.3",
     "semver": "7.3.7"
   },
