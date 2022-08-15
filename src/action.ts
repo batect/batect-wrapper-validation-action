@@ -41,7 +41,7 @@ const ensureSameVersion = (unixInfo: WrapperInfo, windowsInfo: WrapperInfo): voi
 const ensureSupportedVersion = (version: string): void => {
   const minimumRequiredVersion = "0.79.0";
 
-  if (semver.lt(version, minimumRequiredVersion, { loose: false, includePrerelease: false })) {
+  if (semver.lt(version, minimumRequiredVersion, { loose: false })) {
     throw new Error(`Checksums are only available for Batect version ${minimumRequiredVersion} or later, but this project uses ${version}.`);
   }
 };
