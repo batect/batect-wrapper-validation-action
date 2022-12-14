@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@babel/preset-env": "7.20.2",
-    "@types/express": "4.17.14",
+    "@types/express": "4.17.15",
     "@types/jest": "29.2.4",
     "@types/node": "18.11.14",
     "@types/semver": "7.3.13",
