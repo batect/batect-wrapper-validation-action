@@ -68,7 +68,7 @@ jobs:
         run: echo "::set-output name=version::$(echo '${{ github.ref }}' | sed 's#refs/tags/release/##')"
 
       - name: Publish
-        uses: JasonEtco/build-and-tag-action@v2.0.0
+        uses: JasonEtco/build-and-tag-action@v2.0.1
         with:
           tag_name: ${{ steps.extract_version.outputs.version }}
         env:
