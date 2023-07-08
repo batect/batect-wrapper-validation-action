@@ -34,7 +34,11 @@ export enum LineEndingStyle {
 const versionPattern = /^\d+.\d+.\d+$/;
 
 export class WrapperInfoExtractor {
-  constructor(private platform: string, private fileName: string, private versionExtractionPattern: RegExp) {
+  constructor(
+    private platform: string,
+    private fileName: string,
+    private versionExtractionPattern: RegExp,
+  ) {
     if (!versionExtractionPattern.global) {
       throw new Error("Version extraction pattern must be a global regex.");
     }
