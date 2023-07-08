@@ -34,7 +34,7 @@ const ensureSameVersion = (unixInfo: WrapperInfo, windowsInfo: WrapperInfo): voi
   }
 
   throw new Error(
-    `The wrapper scripts have different versions. The Unix wrapper script 'batect' has version '${unixInfo.version}', and the Windows wrapper script 'batect.cmd' has version '${windowsInfo.version}'.`
+    `The wrapper scripts have different versions. The Unix wrapper script 'batect' has version '${unixInfo.version}', and the Windows wrapper script 'batect.cmd' has version '${windowsInfo.version}'.`,
   );
 };
 
@@ -79,7 +79,7 @@ const validateChecksum = (wrapperInfo: WrapperInfo, expectedChecksum: string, ex
   }
 
   throw new Error(
-    `${platformName} wrapper script '${fileName}' has SHA256 checksum ${wrapperInfo.actualChecksum}, but it should have SHA256 checksum ${expectedChecksum}.${lineEndingWarning}`
+    `${platformName} wrapper script '${fileName}' has SHA256 checksum ${wrapperInfo.actualChecksum}, but it should have SHA256 checksum ${expectedChecksum}.${lineEndingWarning}`,
   );
 };
 

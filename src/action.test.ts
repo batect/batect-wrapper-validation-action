@@ -22,7 +22,10 @@ import path from "path";
 class TestConfiguration {
   public directory: string;
 
-  constructor(fixtureName: string, readonly checksumDownloadRootUrl: string) {
+  constructor(
+    fixtureName: string,
+    readonly checksumDownloadRootUrl: string,
+  ) {
     this.directory = path.join(__dirname, "fixtures", "targets", fixtureName);
 
     if (!fs.existsSync(this.directory)) {
